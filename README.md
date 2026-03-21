@@ -1,4 +1,4 @@
-# RaMeS - Raffaele Merge & Split - mini PDF editor
+# RaMeS - Raffaele's Merge & Split - mini PDF editor
 
 **Versione:** 0.1.0 (Alpha - Early Stage) 
 
