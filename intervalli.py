@@ -1,6 +1,6 @@
 from enum import Enum
 import re
-
+### This Module will be Deprecated: Use intervals.py ###
 class Rotazione(Enum):
     """Rotazione a multipli di 90°.\n
     I valori ricordano i punti cardinali.
