@@ -36,5 +36,5 @@ pip install -r requirements.txt
 ```
 
 ## Known Limitations & Next Implementations
-- **Work in Progress**: Integration between the `text_ui` and the refined `pdf_engine` is currently being finalized.
-
+- **Work in Progress**: Integration the refined `pdf_engine` is currently being finalized.
+- **Work in Progress**: Integration the `text_ui`.
