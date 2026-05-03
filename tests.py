@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 from intervals import (Rotation, Interval, signedIntegersParse, unsignedIntegersParse,
                        pageFromString, intervalsParse, intervalsToString, intervalsPagesCount)
-from pdf_engine import checkPdf, pagesCount, split, merge
+from pdf_engine import pagesCountAndCheck, split, merge
 
 def _test_Rotation_Interval_():
     ## uso Rotation
@@ -52,7 +52,7 @@ def _test_Rotation_Interval_():
     print('')
     ...
 # /_test_Rotation_Interval_
-_test_Rotation_Interval_()
+#_test_Rotation_Interval_()
 
 def _test_intParse_pageFromString_():
     ## test int.parse()
@@ -129,7 +129,7 @@ def _test_intParse_pageFromString_():
             pag = pageFromString(stringa, False, 9)
             print(pag)
 # /_test_intParse_pageFromString_
-_test_intParse_pageFromString_()
+#_test_intParse_pageFromString_()
 
 def _test_regex_():
     ## uso regex NESW
@@ -315,7 +315,7 @@ def _test_Intervals_parse_():
             print(e,'|', stringa)
     ...
 # /_test_Intervals_parse_
-_test_Intervals_parse_()
+#_test_Intervals_parse_()
 
 def _create_pdf_examples_():
     from pypdf import PdfWriter
@@ -407,8 +407,7 @@ def _test_pdf_engine_():
     ]
     for path in paths:
         try:
-            if checkPdf(path):
-                pagine = pagesCount(path)
+            pagine = pagesCountAndCheck(path)
             print(path,'ha',pagine,'pagine')
         except Exception as e:
             print(e)
@@ -476,4 +475,5 @@ def _test_pdf_engine_():
         print()
     ...
 # /_test_pdf_engine_
-_test_pdf_engine_()
+#_test_pdf_engine_()
+

@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+
+import intervals
 from intervals import infoIntervals, intervalsParse,intervalsToString
 from pdf_engine import pagesCountAndCheck, split, merge
 
@@ -56,9 +58,9 @@ def askNotExistingPdfPathFile(inputPrompt: str) -> str:
 
         p = Path(userInput)
 
-        if not p.parent.exists():
-            print(f"Errore: La cartella '{p.parent}' non esiste!")
-            continue
+        # if not p.parent.exists(): # deve essere creata
+        #     print(f"Errore: La cartella '{p.parent}' non esiste!")
+        #     continue
         if p.is_dir():
             print("Errore: Il percorso indicato è una cartella, serve un nome file .pdf")
             continue
@@ -122,18 +124,28 @@ def tuiSplit():
             # question può valere: [None / True / False]
             if question != False:
                 while True:
-                    intervalsOut = input(f'Indica gli intervalli delle pagine che il file n° {nFilesOut} conterrà: ')
+                    intervalsOut = input(f'Indica gli intervalli delle pagine che il file n° {nFilesOut} \nconterrà (inserisci "i" per info): ')
+                    if intervalsOut.lower()=='i':
+                        infoIntervals()
+                        continue
                     intervalsOut = intervalsParse(intervalsOut, pagesCount)
+                    if len(intervalsOut)==0:
+                        question = input("Non ci sono intervalli validi, considero l'intero file senza rotazioni? [s/n]: ")
+                        if question.lower() == 's':
+                            interv=intervals.Interval(1,pagesCount)
+                            intervalsOut.append(interv)
+                        else:
+                            continue
+                    # /if len(intervalsOut)==0
                     print(f'Gli intervalli sono stati interpretati così:\n{intervalsToString(intervalsOut)}')
-                    question = input(f'Vuoi utilizzare questi intervalli? [s/n]: ')
-                    question = question.lower() == 's'
-                    if question:
+                    question = input('Vuoi utilizzare questi intervalli? [s/n]: ')
+                    if question.lower() == 's':
                         # modifica o aggiunta sono uguali in Python
                         filesOutput[fileOut] = intervalsOut
                         break
                 # /while
             if len(filesOutput) > 0:
-                question = input(f'Vuoi aggiungere altri files di output? [s/n]: ')
+                question = input('Vuoi aggiungere altri files di output? [s/n]: ')
                 if question.lower() != 's':
                     break
             # qui question==False or question.lower() == 's', ma cmq l'iterazione è finita
@@ -182,17 +194,27 @@ def tuiMerge():
             # Niente domande di cambio intervalli
 
             while True:
-                intervalsIn = input(f'Indica gli intervalli delle pagine che verranno copiate dal file n° {nroFiles}: ')
+                intervalsIn = input(f'Indica gli intervalli delle pagine che verranno copiate dal \nfile n° {nroFiles} (inserisci "i" per info): ')
+                if intervalsIn.lower()=='i':
+                    infoIntervals()
+                    continue
                 intervalsIn = intervalsParse(intervalsIn, pagesCount)
+                if len(intervalsIn) == 0:
+                    question = input("Non ci sono intervalli validi, considero l'intero file senza rotazioni? [s/n]: ")
+                    if question.lower() == 's':
+                        interv = intervals.Interval(1, pagesCount)
+                        intervalsIn.append(interv)
+                    else:
+                        continue
+                # /if len(intervalsOut)==0
                 print(f'Gli intervalli sono stati interpretati così: {intervalsToString(intervalsIn)}')
-                question = input(f'Vuoi utilizzare questi intervalli? [s/n]: ')
-                question = question.lower() == 's'
-                if question:
+                question = input('Vuoi utilizzare questi intervalli? [s/n]: ')
+                if question.lower() == 's':
                     filesInput.append([fileIn, intervalsIn])
                     break
             # /while
             if len(filesInput) > 0:
-                question = input(f'Vuoi aggiungere altri files di input? [s/n]: ')
+                question = input('Vuoi aggiungere altri files di input? [s/n]: ')
                 if question.lower() != 's':
                     break
         # /while
@@ -215,7 +237,8 @@ def tuiMerge():
 def runTextUI():
     """Run the text UI
     """
-    print('### Text UI ###')
+    print('### RaMeS - Raffaele\'s Merge & Split - mini PDF editor ###')
+    print('###                   Text UI                           ###')
 
     while True:
         print('1) Scelta comando')

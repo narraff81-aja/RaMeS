@@ -265,6 +265,8 @@ def _split_(pathfileInput: str, filesOutput: dict[str, list[Interval]], callback
                 # Non va bene! Creerebbe un file vuoto!
                 raise ValueError('filesOutput senza pagine!')
             else:
+                # crea le cartelle (anche intermedie, se occorrono)
+                Path(outPath).parent.mkdir(parents=True, exist_ok=True)
                 # scrive effettivamente sul file
                 with open(outPath, "wb") as f:
                     writer.write(f)
@@ -301,8 +303,8 @@ def _merge_(filesInput: list[tuple[str, list[Interval]]], pathfileOutput: str, c
         raise TypeError("pathfileOutput DEVE essere una stringa!")
     if isdir(Path(pathfileOutput)) :
         raise ValueError(f"pathfileOutput è una cartella! '{pathfileOutput}'")
-    if not os.path.exists(Path(pathfileOutput).parent):
-        raise ValueError(f"Cartella che conterrà il file non trovata: {pathfileOutput}")
+    # if not os.path.exists(Path(pathfileOutput).parent):
+    #     raise ValueError(f"Cartella che conterrà il file non trovata: {pathfileOutput}")
     if not str.endswith(pathfileOutput, ".pdf"):
         raise ValueError("pathfileOutput non ha estensione PDF!")
     if not isinstance(filesInput, list):
@@ -414,6 +416,8 @@ def _merge_(filesInput: list[tuple[str, list[Interval]]], pathfileOutput: str, c
     if len(result['errors']) >0:
         # se ha errori, da cmq un risultato ma purtroppo incompleto!
         pathfileOutput=str.replace('.pdf','_[incomplete].pdf')
+    # crea le cartelle (anche intermedie, se occorrono)
+    Path(pathfileOutput).parent.mkdir(parents=True, exist_ok=True)
     # Scrittura finale. Non si può fare ad ogni iterazione (in mode ["wb", "ab", "ab", ...])
     # perchè ad ogni riapertura deve rileggere tutto il file, molto sconveniente!
     # readers serve aiutare nella scrittura
